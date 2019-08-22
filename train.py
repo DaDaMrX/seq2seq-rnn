@@ -37,8 +37,11 @@ class Trainer:
     def batch2sents(self, batch):
         sents = []
         for data in batch.tolist():
-            for _ in range(data.count(0)):
-                data.remove(0)
+            for _ in range(data.count(self.vocab.pad_value)):
+                data.remove(self.vocab.pad_value)
+            if self.vocab.eos_value in data:
+                tail = len(data) - data[::-1].index(self.vocab.eos_value)
+                data = data[:tail]
             sent = [self.vocab[x] for x in data]
             sents.append(' '.join(sent))
         return sents
@@ -79,8 +82,8 @@ class Trainer:
             self.writer.add_scalars('overfit', state, self.global_t)
             
     def fit(self): 
+        self.global_t = 0
         for epoch in tqdm(range(self.n_epoch), desc='Total'):
-            self.global_t = 0
             self.train_epoch(epoch)
             if self.valid_dataloader is not None:
                 self.valid_epoch(epoch)
@@ -98,8 +101,8 @@ class Trainer:
 
 if __name__ == '__main__':
     data_dir = 'data'
-    embedding_path = 'embedding/glove.twitter.27B.200d.txt'
-    tb_dir = 'runs/train1'
+    embedding_path = 'embedding/glove.42B.300d.txt'
+    tb_dir = 'runs/train3'
     case_interval = 10
 
     max_len = 30

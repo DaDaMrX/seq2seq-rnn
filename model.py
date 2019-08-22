@@ -58,7 +58,7 @@ class Seq2Seq(torch.nn.Module):
         super(Seq2Seq, self).__init__()
         if embedding is not None:
             self.embed = torch.nn.Embedding.from_pretrained(
-                torch.tensor(embedding), freeze=True)
+                torch.tensor(embedding), freeze=False)
         else:
             self.embed = torch.nn.Embedding(vocab_size, embed_size)
         self.encoder = Encoder(self.embed, hidden_size, pad_value)
