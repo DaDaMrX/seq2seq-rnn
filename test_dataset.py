@@ -17,7 +17,7 @@ class TestDataset(unittest.TestCase):
             use_cache=False,
         )
         dataset = Dataset(pairs, vocab)
-        self.assertEqual(len(dataset), 137952)
+        self.assertEqual(len(dataset), 137990)
         self.assertEqual(len(vocab), self.vocab_size)
 
     def test_load_embedding(self):
@@ -27,11 +27,11 @@ class TestDataset(unittest.TestCase):
             vocab_size=self.vocab_size,
             use_cache=True,
         )
-        self.assertEqual(len(pairs), 137990)
+        self.assertEqual(len(vocab), self.vocab_size)
         embedding = load_embedding(
             embedding_path=self.embedding_path,
             vocab=vocab,
             use_cache=False,
         )
-        self.assertEqual(embedding.shape, (self.vocab_size, 300))   
+        self.assertEqual(embedding.shape, (self.vocab_size, 300))
  

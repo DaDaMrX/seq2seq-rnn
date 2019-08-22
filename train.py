@@ -5,8 +5,7 @@ import torch
 from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
 
-from dataset import DataBuilder, Dataset, Vocab
-from embedding import load_embedding
+from dataset import DataBuilder, Dataset, Vocab, load_embedding
 from model import Seq2Seq
 
 
@@ -102,7 +101,7 @@ class Trainer:
 if __name__ == '__main__':
     data_dir = 'data'
     embedding_path = 'embedding/glove.42B.300d.txt'
-    tb_dir = 'runs/train3'
+    tb_dir = 'runs/train'
     case_interval = 10
 
     max_len = 30
