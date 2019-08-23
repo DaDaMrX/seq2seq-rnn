@@ -96,12 +96,12 @@ class Trainer:
             state = self.train_batch(batch)
             pbar.set_postfix(state)
             self.writer.add_scalars('train', state, self.global_t)
-
+            
 
 if __name__ == '__main__':
     data_dir = 'data'
     embedding_path = 'embedding/glove.42B.300d.txt'
-    tb_dir = 'runs/train'
+    tb_dir = 'runs/att200+embed'
     case_interval = 10
 
     max_len = 30
@@ -110,7 +110,7 @@ if __name__ == '__main__':
     learning_rate = 0.001
     batch_size = 32
     embed_size = 300
-    hidden_size = 300
+    hidden_size = 200
     
 
     pairs, vocab = DataBuilder.build(
