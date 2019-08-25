@@ -22,8 +22,8 @@ class Encoder(torch.nn.Module):
         output, (h, c) = self.lstm(x)
         output, _ = torch.nn.utils.rnn.pad_packed_sequence(
             output, padding_value=self.pad_value)
-        # h = torch.cat([h[-2], h[-1]], dim=-1)
-        # c = torch.cat([c[-2], c[-1]], dim=-1)
+        # output shape: (seq_len, batch, num_directions * hidden_size)
+        # h, c shape: (num_layers * num_directions, batch, hidden_size)
         h = h[-2] + h[-1]
         c = c[-2] + c[-1]
         return output, (h, c)
@@ -58,18 +58,16 @@ class Decoder(torch.nn.Module):
     def forward(self, hidden, encoder_output, y):
         y_preds = []
         h, c = hidden
-        x = torch.empty(*y.size()[1:], dtype=torch.long)
-        x = x.fill_(self.sos_value)
+        x = torch.empty(*y.shape[1:], dtype=torch.long)
+        x = x.fill_(self.sos_value).to(h.device)
         for i in range(len(y)):
             context = self.attention(
                 torch.cat([h, c], dim=1),
                 encoder_output,
             )
             x = self.embed(x)
-            h, c = self.lstm_cell(
-                torch.cat([x, context], dim=1),
-                (h, c)
-            )
+            x = torch.cat([x, context], dim=1)
+            h, c = self.lstm_cell(x, (h, c))
             y_pred = self.out(c)
             y_preds.append(y_pred)
             x = y[i]
@@ -103,17 +101,3 @@ class Seq2Seq(torch.nn.Module):
         encoder_output, (h, c) = self.encoder(x)
         y_preds = self.decoder((h, c), encoder_output, y)
         return y_preds
-
-
-if __name__ == '__main__':
-    vocab_size = 10
-    embed_size = 5
-    batch_size = 4
-    hidden_size = 4
-    seq_len = 5
-
-    embed = torch.nn.Embedding(vocab_size, embed_size)
-    encoder = Encoder(embed, hidden_size, pad_value=0)
-    x = torch.randint(vocab_size, (seq_len, batch_size))
-    contex, (h, c) = encoder(x)
-    print(contex.shape, h.shape, c.shape)

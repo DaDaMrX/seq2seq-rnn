@@ -34,4 +34,8 @@ class TestDataset(unittest.TestCase):
             use_cache=False,
         )
         self.assertEqual(embedding.shape, (self.vocab_size, 300))
- 
+
+
+if __name__ == '__main__':
+    unittest.main()
+        
