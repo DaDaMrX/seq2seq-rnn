@@ -5,7 +5,8 @@ import torch
 from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
 
-from dataset import DataBuilder, Dataset, Vocab, load_embedding
+# from dataset import DataBuilder, Dataset, Vocab, load_embedding
+from dataset_daily import DataBuilder, Dataset, Vocab, load_embedding
 from model import Seq2Seq
 
 
@@ -100,17 +101,18 @@ class Trainer:
             
 
 if __name__ == '__main__':
-    data_dir = 'data'
+    # data_dir = 'data'
+    data_dir = 'data-daily-train'
     embedding_path = 'embedding/glove.42B.300d.txt'
-    tb_dir = 'runs/exp'
+    tb_dir = 'runs/fair'
     case_interval = 10
-    gpu_id = 4
+    gpu_id = 7
 
     max_len = 30
     vocab_size = 10000
-    n_epoch = 2
+    n_epoch = 30
     learning_rate = 0.001
-    batch_size = 32
+    batch_size = 64
     embed_size = 300
     hidden_size = 200
 

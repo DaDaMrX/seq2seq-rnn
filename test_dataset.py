@@ -1,10 +1,12 @@
 import unittest
 
-from dataset import DataBuilder, Dataset, load_embedding
+# from dataset import DataBuilder, Dataset, load_embedding
+from dataset_daily import DataBuilder, Dataset, load_embedding
 
 
 class TestDataset(unittest.TestCase):
-    data_dir = 'data'
+    # data_dir = 'data'
+    data_dir = 'data-daily-train'
     embedding_path = 'embedding/glove.42B.300d.txt'
     vocab_size = 10000
     seq_max_len = 30
@@ -17,7 +19,7 @@ class TestDataset(unittest.TestCase):
             use_cache=False,
         )
         dataset = Dataset(pairs, vocab)
-        self.assertEqual(len(dataset), 137990)
+        # self.assertEqual(len(dataset), 137990)
         self.assertEqual(len(vocab), self.vocab_size)
 
     def test_load_embedding(self):
